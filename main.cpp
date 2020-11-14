@@ -11,20 +11,23 @@ int main() {
     TernaryTree tt;
 
     auto start = chrono::high_resolution_clock::now();
-    auto keys = tt.build(filename);
+    auto todasLasKeys = tt.build(filename);
     auto end = chrono::high_resolution_clock::now();
     auto executionTime = chrono::duration_cast<chrono::milliseconds>(end - start);
     auto buildTime = executionTime.count();
     
     
     ifstream file(filename, ios::binary);
+
+    vector<string> keys (todasLasKeys.begin(), todasLasKeys.begin() + 100);
     
     start = chrono::high_resolution_clock::now();
     for (auto i : keys) {
         // No repite palabras en el search
         cout << "===================" << '\n';
-        cout << "Key: " << i << endl;
-        for (auto direccion_offset : tt.search(i)) {
+        auto response = tt.search(i);
+        cout << "Key: " << i << " tiene " << response.size() << " repeticiones.\n";
+        for (auto direccion_offset : response) {
             file.seekg(direccion_offset.first, ios::beg);
             char* buffer = new char[direccion_offset.second - 1];
             file.read(buffer, direccion_offset.second - 1);
