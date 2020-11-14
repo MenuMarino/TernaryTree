@@ -35,7 +35,10 @@ int main() {
     end = chrono::high_resolution_clock::now();
     executionTime = chrono::duration_cast<chrono::milliseconds>(end - start);
 
-    cout << "Keys: " << keys.size() << ".\n";
+    cout << "Archivos que empiezan con Power: \n";
+    tt.prefix("Power");
+
+    cout << "\nKeys: " << keys.size() << ".\n";
     cout << "Build: " << buildTime << " ms.\n";
     cout << "Search all keys: " << executionTime.count() << " ms.\n";
     cout << "Reads (promedio): " << reads/keys.size() << ".\n";

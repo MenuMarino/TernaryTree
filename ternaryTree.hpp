@@ -160,7 +160,58 @@ public:
         return keys;
     }
 
+    void prefix(string text) {
+        auto pre = searchPrefix(text);
+        if (pre) {
+            prefixes(pre, text);
+        }
+    }
+
 private:
+    void prefixes(Node* nodo, string text) {
+        if (nodo->left_child) {
+            string tmp = text;
+            tmp[tmp.length() - 1] = nodo->left_child->letra; 
+            prefixes(nodo->left_child, tmp);
+        }
+        if (nodo->center_child) {
+            if (nodo->center_child->isTerminal) {
+                cout << text << '\n';
+            }
+            string tmp = text + nodo->center_child->letra;
+            prefixes(nodo->center_child, tmp);
+        }
+        if (nodo->right_child) {
+            string tmp = text;
+            tmp[tmp.length() - 1] = nodo->right_child->letra; 
+            prefixes(nodo->right_child, tmp);
+        }
+    }
+
+    Node* searchPrefix(string value) {
+        Node* c_root = root;
+        size_t i = 0;
+        while ( i < value.length() && c_root->hijosValidos() ) {
+            ++reads;
+            if (value[i] == c_root->letra) {
+                if (!c_root->center_child)
+                    return {};
+                c_root = c_root->center_child;
+                ++i;
+            } else if (value[i] > c_root->letra) {
+                if (!c_root->right_child)
+                    return {};
+                c_root = c_root->right_child;
+            } else {
+                if (!c_root->left_child)
+                    return {};
+                c_root = c_root->left_child;
+            }
+        }
+        
+        return c_root->parent;
+    }
+
     string getFileNameFromRoute(string s) {
         string delimiter = "/";
 
